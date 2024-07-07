@@ -6,6 +6,6 @@ RUN ls -la target/
 
 FROM openjdk:17-jdk-slim
 # Ensure the JAR file is copied correctly. Adjust the source path if necessary.
-COPY --from=build /target/personal-store-management-1.0.jar /app/app.jar
+COPY --from=build /target/personal-store-management-project-0.0.1-SNAPSHOT.jar personal-store-management.jar
 EXPOSE 2003
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "personal-store-management.jar"]
