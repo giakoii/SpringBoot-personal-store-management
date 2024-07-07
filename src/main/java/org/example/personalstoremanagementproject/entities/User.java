@@ -1,4 +1,4 @@
-package entities;
+package org.example.personalstoremanagementproject.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

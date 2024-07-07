@@ -18,4 +18,4 @@ spring:
 server:
   port: 2003
   servlet:
-    context-path: /api
+        context-path: /api
