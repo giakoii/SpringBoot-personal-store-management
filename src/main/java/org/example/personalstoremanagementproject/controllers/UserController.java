@@ -21,4 +21,5 @@ public class UserController {
     public User createUser(@RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
     }
+
 }
