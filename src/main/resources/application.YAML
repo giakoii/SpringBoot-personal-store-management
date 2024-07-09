@@ -16,3 +16,6 @@ server:
   port: 2003
   servlet:
     context-path: /api
+logging:
+  level:
+    root: DEBUG
