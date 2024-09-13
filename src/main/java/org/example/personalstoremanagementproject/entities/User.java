@@ -12,7 +12,7 @@ import java.util.List;
 import static lombok.AccessLevel.PRIVATE;
 
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "tbl_User")
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,31 +20,31 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE)
 public class User {
     @Id
-    @Column(name = "user_id", nullable = false, length = 50)
+    @Column(name = "user_id", length = 10)
     String userId;
 
-    @Column(name = "user_name", nullable = false, length = 50)
+    @Column(name = "user_name", length = 255)
     String userName;
 
-    @Column(name = "password", nullable = false, length = 50)
+    @Column(name = "password", length = 255)
     String password;
 
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email", length = 255)
     String email;
 
-    @Column(name = "full_name", nullable = false, length = 50)
+    @Column(name = "full_name", columnDefinition = "NVARCHAR(MAX)")
     String fullName;
 
-    @Column(name = "nick_name", nullable = false, length = 50)
+    @Column(name = "nick_name", columnDefinition = "NVARCHAR(MAX)")
     String nickName;
 
-    @Column(name = "phone", nullable = false, length = 50)
+    @Column(name = "phone", length = 15)
     String phone;
 
-    @Column(name = "address", nullable = false, length = 50)
+    @Column(name = "address", columnDefinition = "NVARCHAR(MAX)")
     String address;
 
-    @Column(name = "role", nullable = false, length = 50)
+    @Column(name = "role", length = 50)
     @Enumerated(EnumType.STRING)
     Role role;
 
