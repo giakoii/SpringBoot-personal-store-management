@@ -21,12 +21,15 @@ public class UserServiceImp implements IUserService {
 
     private JavaMailSender javaMailSender;
 
-
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public User createUser(UserDTO userDTO) {
+        if(userRepository.findByEmail(userDTO.getEmail()) != null){
+            throw new RuntimeException("Email" + userDTO.getEmail() + "is already in use");
+        }
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         Util util = new Util();
         String userId = util.createId(new User(), userRepository);
@@ -50,7 +53,12 @@ public class UserServiceImp implements IUserService {
 
     @Override
     public User userLogin(String userName, String password) {
-        return null;
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        User user = userRepository.findByUserName(userName);
+        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
+        }
+        return user;
     }
 
     @Override
@@ -60,7 +68,8 @@ public class UserServiceImp implements IUserService {
 
     @Override
     public User getUserById(String userId) {
-        return null;
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return user;
     }
 
     @Override

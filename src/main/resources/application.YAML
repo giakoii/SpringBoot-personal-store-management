@@ -2,13 +2,14 @@ spring:
 
 #cấu hình database
   datasource:
-    url: jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=
+    url: jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=PersonalStore
     username: sa
     password: Gi@khoi221203
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
 #cấu hình jpa
   jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
     hibernate:
       ddl-auto: none
     show-sql: true
