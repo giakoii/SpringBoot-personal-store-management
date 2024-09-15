@@ -11,5 +11,6 @@ public interface IUserService {
     List<User> getAllUsers();
     User getUserById(String userId);
     User getUserByUserName(String userName);
-    User updateUser(String userId,UserDTO userDTO);
+    User updateInformationUser(String userId, UserDTO userDTO);
+    User deleteUser(String userId);
 }

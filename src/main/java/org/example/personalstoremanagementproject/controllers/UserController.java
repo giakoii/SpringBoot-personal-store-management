@@ -42,4 +42,17 @@ public class UserController {
     User getUserById(@PathVariable String userId) {
         return userService.getUserById(userId);
     }
+
+    //===================================== PUT =====================================
+    @PutMapping("/updateInformationUser/{userId}")
+    User updateInformationUser(@PathVariable String userId, @RequestBody UserDTO userDTO) {
+        return userService.updateInformationUser(userId, userDTO);
+    }
+
+    @PutMapping("/deleteUser/{userId}")
+    User deleteUser(@PathVariable String userId) {
+        return userService.deleteUser(userId);
+    }
+
+    //===================================== DELETE =====================================
 }

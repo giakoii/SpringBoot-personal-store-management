@@ -3,6 +3,7 @@ package org.example.personalstoremanagementproject.services;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.example.personalstoremanagementproject.dtos.UserDTO;
+import org.example.personalstoremanagementproject.entities.Status;
 import org.example.personalstoremanagementproject.entities.User;
 import org.example.personalstoremanagementproject.repositories.UserRepository;
 import org.example.personalstoremanagementproject.utils.Util;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements IUserService {
@@ -26,7 +28,7 @@ public class UserServiceImp implements IUserService {
 
     @Override
     public User createUser(UserDTO userDTO) {
-        if(userRepository.findByEmail(userDTO.getEmail()) != null){
+        if(userRepository.findByEmail(userDTO.getEmail()) != null || userRepository.findByUserName(userDTO.getUserName()) != null){
             throw new RuntimeException("Email" + userDTO.getEmail() + "is already in use");
         }
 
@@ -54,9 +56,11 @@ public class UserServiceImp implements IUserService {
     @Override
     public User userLogin(String userName, String password) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        User user = userRepository.findByUserName(userName);
-        if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid username or password");
+        User user = userRepository.findByUserName(userName).orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getStatus().equals(Status.ENABLED)){
+            if (!passwordEncoder.matches(password, user.getPassword())) {
+                throw new RuntimeException("Invalid username or password");
+            }
         }
         return user;
     }
@@ -74,15 +78,38 @@ public class UserServiceImp implements IUserService {
 
     @Override
     public User getUserByUserName(String userName) {
-        return null;
+        User user = userRepository.findByUserName(userName).orElseThrow(() -> new RuntimeException("User not found"));
+        return user;
     }
 
 
     @Override
-    public User updateUser(String userId, UserDTO userDTO) {
-        return null;
+    public User updateInformationUser(String userId, UserDTO userDTO) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        if(userDTO.getFullName() != null){
+            user.setFullName(userDTO.getFullName());
+        }
+        if(userDTO.getNickName() != null){
+            user.setNickName(userDTO.getNickName());
+        }
+        if(userDTO.getPhone() != null){
+            user.setPhone(userDTO.getPhone());
+        }
+        if(userDTO.getAddress() != null){
+            user.setAddress(userDTO.getAddress());
+        }
+        return userRepository.save(user);
     }
 
+    @Override
+    public User deleteUser(String userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent() && user.get().getStatus().equals(Status.ENABLED)) {
+            user.get().setStatus(Status.DISABLED);
+            return userRepository.save(user.get());
+        }
+        return null;
+    }
 
     //hàm OTP Email
     public void sendOtpEmail(String email) {

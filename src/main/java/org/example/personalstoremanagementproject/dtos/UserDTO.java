@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.personalstoremanagementproject.entities.Order;
 import org.example.personalstoremanagementproject.entities.Role;
+import org.example.personalstoremanagementproject.entities.Status;
 
 import java.util.List;
 
@@ -23,5 +24,6 @@ public class UserDTO {
         String nickName;
         String phone;
         String address;
+        Status status;
         Role role;
 }

@@ -44,6 +44,10 @@ public class User {
     @Column(name = "address", columnDefinition = "NVARCHAR(MAX)")
     String address;
 
+    @Column(name = "status", length = 100, columnDefinition = "NVARCHAR")
+    @Enumerated(EnumType.STRING)
+    Status status;
+
     @Column(name = "role", length = 50)
     @Enumerated(EnumType.STRING)
     Role role;
