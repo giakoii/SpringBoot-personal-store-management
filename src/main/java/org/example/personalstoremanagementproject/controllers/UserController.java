@@ -1,5 +1,7 @@
 package org.example.personalstoremanagementproject.controllers;
 
+import jakarta.validation.Valid;
+import org.example.personalstoremanagementproject.dtos.ApiResponse;
 import org.example.personalstoremanagementproject.dtos.UserDTO;
 import org.example.personalstoremanagementproject.entities.User;
 import org.example.personalstoremanagementproject.services.IUserService;
@@ -19,8 +21,10 @@ public class UserController {
     //===================================== POST =====================================
     //
     @PostMapping("/create")
-    User createUser(@RequestBody UserDTO userDTO) {
-        return userService.createUser(userDTO);
+    ApiResponse<User> createUser(@RequestBody @Valid UserDTO userDTO) {
+        ApiResponse<User> response = new ApiResponse<>();
+        response.setResult(userService.createUser(userDTO));
+        return response;
     }
 
     //

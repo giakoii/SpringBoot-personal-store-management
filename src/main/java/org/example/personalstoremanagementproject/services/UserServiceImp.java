@@ -28,8 +28,11 @@ public class UserServiceImp implements IUserService {
 
     @Override
     public User createUser(UserDTO userDTO) {
-        if(userRepository.findByEmail(userDTO.getEmail()) != null || userRepository.findByUserName(userDTO.getUserName()) != null){
-            throw new RuntimeException("Email" + userDTO.getEmail() + "is already in use");
+        if (userRepository.existsByUserName(userDTO.getUserName())) {
+            throw new RuntimeException("Username is already exists");
+        }
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new RuntimeException("Email is already exists");
         }
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -46,6 +49,7 @@ public class UserServiceImp implements IUserService {
                     .phone(userDTO.getPhone())
                     .address(userDTO.getAddress())
                     .role(userDTO.getRole())
+                    .status(Status.ENABLED)
                     .build();
             return userRepository.save(user);
         } catch (Exception e) {
