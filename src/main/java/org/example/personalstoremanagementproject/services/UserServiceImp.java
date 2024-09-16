@@ -5,6 +5,8 @@ import jakarta.mail.internet.MimeMessage;
 import org.example.personalstoremanagementproject.dtos.UserDTO;
 import org.example.personalstoremanagementproject.entities.Status;
 import org.example.personalstoremanagementproject.entities.User;
+import org.example.personalstoremanagementproject.exceptions.AppException;
+import org.example.personalstoremanagementproject.exceptions.ErrorCode;
 import org.example.personalstoremanagementproject.repositories.UserRepository;
 import org.example.personalstoremanagementproject.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,13 @@ public class UserServiceImp implements IUserService {
     private UserRepository userRepository;
 
     @Override
+    //Method to create a new user
     public User createUser(UserDTO userDTO) {
         if (userRepository.existsByUserName(userDTO.getUserName())) {
-            throw new RuntimeException("Username is already exists");
+            throw new AppException(ErrorCode.USER_EXIST);
         }
         if (userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new RuntimeException("Email is already exists");
+            throw new AppException(ErrorCode.USER_EXIST);
         }
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -58,9 +61,10 @@ public class UserServiceImp implements IUserService {
     }
 
     @Override
+    //Method to login
     public User userLogin(String userName, String password) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        User user = userRepository.findByUserName(userName).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUserName(userName).orElseThrow(() -> new AppException(ErrorCode.USER_EXIST));
         if (user.getStatus().equals(Status.ENABLED)){
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new RuntimeException("Invalid username or password");
@@ -76,20 +80,20 @@ public class UserServiceImp implements IUserService {
 
     @Override
     public User getUserById(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return user;
     }
 
     @Override
     public User getUserByUserName(String userName) {
-        User user = userRepository.findByUserName(userName).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUserName(userName).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return user;
     }
 
 
     @Override
     public User updateInformationUser(String userId, UserDTO userDTO) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         if(userDTO.getFullName() != null){
             user.setFullName(userDTO.getFullName());
         }

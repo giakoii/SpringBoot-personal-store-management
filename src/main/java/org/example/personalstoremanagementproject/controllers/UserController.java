@@ -19,44 +19,65 @@ public class UserController {
 
 
     //===================================== POST =====================================
-    //
+    //Method to create a new user
     @PostMapping("/create")
     ApiResponse<User> createUser(@RequestBody @Valid UserDTO userDTO) {
         ApiResponse<User> response = new ApiResponse<>();
+        response.setStatus(200);
+        response.setCode(200);
         response.setResult(userService.createUser(userDTO));
         return response;
     }
 
-    //
+    //Method to login
     @PostMapping("/login")
-    User userLogin(@RequestBody UserDTO userDTO) {
-        return userService.userLogin(userDTO.getUserName(), userDTO.getPassword());
+    ApiResponse<User> userLogin(@RequestBody UserDTO userDTO) {
+        ApiResponse<User> response = new ApiResponse<>();
+        response.setStatus(200);
+        response.setCode(200);
+        response.setResult(userService.userLogin(userDTO.getUserName(), userDTO.getPassword()));
+        return response;
     }
-
-    //
-
+    //Method forgot password
 
     //===================================== GET =====================================
+    //Method to get all users
     @GetMapping("/getAllUsers")
-    List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ApiResponse<List<User>> getAllUsers() {
+        ApiResponse<List<User>> response = new ApiResponse<>();
+        response.setStatus(200);
+        response.setCode(200);
+        response.setResult(userService.getAllUsers());
+        return response;
     }
 
+    //Method to get user by userId
     @GetMapping("/getUserById/{userId}")
-    User getUserById(@PathVariable String userId) {
-        return userService.getUserById(userId);
+    ApiResponse<User> getUserById(@PathVariable String userId) {
+        ApiResponse<User> response = new ApiResponse<>();
+        response.setStatus(200);
+        response.setCode(200);
+        response.setResult(userService.getUserById(userId));
+        return response;
     }
 
     //===================================== PUT =====================================
     @PutMapping("/updateInformationUser/{userId}")
-    User updateInformationUser(@PathVariable String userId, @RequestBody UserDTO userDTO) {
-        return userService.updateInformationUser(userId, userDTO);
+    ApiResponse<User> updateInformationUser(@PathVariable String userId, @RequestBody UserDTO userDTO) {
+        ApiResponse<User> response = new ApiResponse<>();
+        response.setStatus(200);
+        response.setCode(200);
+        response.setResult(userService.updateInformationUser(userId, userDTO));
+        return response;
     }
 
     @PutMapping("/deleteUser/{userId}")
-    User deleteUser(@PathVariable String userId) {
-        return userService.deleteUser(userId);
+    ApiResponse<User> deleteUser(@PathVariable String userId) {
+        ApiResponse<User> response = new ApiResponse<>();
+        response.setStatus(200);
+        response.setCode(200);
+        response.setResult(userService.deleteUser(userId));
+        return response;
     }
-
     //===================================== DELETE =====================================
 }

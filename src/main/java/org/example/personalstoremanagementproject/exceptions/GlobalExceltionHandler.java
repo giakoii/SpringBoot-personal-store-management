@@ -11,12 +11,14 @@ import java.util.Objects;
 @ControllerAdvice
 public class GlobalExceltionHandler {
 
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handleRuntimeException(RuntimeException e) {
+    @ExceptionHandler(value = AppException.class)
+    ResponseEntity<ApiResponse> handleAppException(AppException e) {
+        ErrorCode errorCode = e.getCodeError();
         ApiResponse response = new ApiResponse();
         response.setSuccess(false);
-        response.setCode(400);
-        response.setMessage(e.getMessage());
+        response.setStatus(400);
+        response.setCode(errorCode.getCode());
+        response.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -24,16 +26,7 @@ public class GlobalExceltionHandler {
     ResponseEntity<ApiResponse> handleException(Exception e) {
         ApiResponse response = new ApiResponse();
         response.setSuccess(false);
-        response.setCode(400);
-        response.setMessage(e.getMessage());
-        return ResponseEntity.badRequest().body(response);
-    }
-
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        ApiResponse response = new ApiResponse();
-        response.setSuccess(false);
-        response.setCode(400);
+        response.setCode(500);
         response.setMessage(e.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
