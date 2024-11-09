@@ -1,4 +1,4 @@
-package project.personal.personalstoremanagementproject.v1.controllers.LoginScreen;
+package project.personal.personalstoremanagementproject.v1.controllers.loginscreen;
 
 import project.personal.personalstoremanagementproject.v1.AbstractApiResponse;
 

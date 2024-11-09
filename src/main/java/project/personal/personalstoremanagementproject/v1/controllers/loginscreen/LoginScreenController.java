@@ -1,6 +1,5 @@
-package project.personal.personalstoremanagementproject.v1.controllers.LoginScreen;
+package project.personal.personalstoremanagementproject.v1.controllers.loginscreen;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

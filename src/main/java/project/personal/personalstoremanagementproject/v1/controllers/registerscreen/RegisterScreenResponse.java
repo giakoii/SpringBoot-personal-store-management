@@ -1,4 +1,4 @@
-package project.personal.personalstoremanagementproject.v1.controllers.RegisterScreen;
+package project.personal.personalstoremanagementproject.v1.controllers.registerscreen;
 
 import lombok.Builder;
 import project.personal.personalstoremanagementproject.v1.AbstractApiResponse;
