@@ -13,13 +13,13 @@ import project.personal.personalstoremanagementproject.v1.DetailError;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("api/v1/register")
-public class ScreenRegisterController extends AbstractApiController<ScreenRegisterRequest, ScreenRegisterResponse, String> {
+@RestController
+public class RegisterScreenController extends AbstractApiController<RegisterScreenRequest, RegisterScreenResponse, String> {
 
     private final UserRepository userRepository;
 
-    public ScreenRegisterController(UserRepository userRepository) {
+    public RegisterScreenController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -29,7 +29,7 @@ public class ScreenRegisterController extends AbstractApiController<ScreenRegist
      * @return
      */
     @Override
-    protected ScreenRegisterResponse exec(ScreenRegisterRequest request) {
+    protected RegisterScreenResponse exec(RegisterScreenRequest request) {
         // Find user by username and email
         var user = userRepository.existsByEmailAndUserName(request.getEmail(), request.getUserName());
         if (user) {
@@ -44,10 +44,6 @@ public class ScreenRegisterController extends AbstractApiController<ScreenRegist
                 .userName(request.getUserName())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-                .fullName(request.getFullName())
-                .nickName(request.getNickName())
-                .phoneNumber(request.getPhoneNumber())
-                .address(request.getAddress())
                 .role(ConstantEnum.Role.CUSTOMER)
                 .lastLogin(null)
                 .build();
@@ -55,7 +51,7 @@ public class ScreenRegisterController extends AbstractApiController<ScreenRegist
         userRepository.save(newUser);
 
         // True
-        ScreenRegisterResponse registerResponse = new ScreenRegisterResponse();
+        RegisterScreenResponse registerResponse = new RegisterScreenResponse();
         registerResponse.setSuccess(true);
         registerResponse.setMessage(ErrorCode.SUCCESS,"Create user successful");
         return registerResponse;
@@ -68,7 +64,7 @@ public class ScreenRegisterController extends AbstractApiController<ScreenRegist
      * @return
      */
     @Override
-    protected ScreenRegisterResponse errorCheck(ScreenRegisterRequest request, List<DetailError> detailErrorList) {
+    protected RegisterScreenResponse errorCheck(RegisterScreenRequest request, List<DetailError> detailErrorList) {
         return null;
     }
 }

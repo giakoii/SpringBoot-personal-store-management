@@ -4,5 +4,5 @@ import lombok.Builder;
 import project.personal.personalstoremanagementproject.v1.AbstractApiResponse;
 
 @Builder
-public class ScreenRegisterResponse extends AbstractApiResponse<String> {
+public class RegisterScreenResponse extends AbstractApiResponse<String> {
 }
