@@ -2,5 +2,5 @@ package project.personal.personalstoremanagementproject.v1.controllers.loginscre
 
 import project.personal.personalstoremanagementproject.v1.AbstractApiResponse;
 
-public class LoginScreenResponse extends AbstractApiResponse<LoginScreenEntity> {
+public class LoginScreenResponse extends AbstractApiResponse<LoginScreenModel> {
 }

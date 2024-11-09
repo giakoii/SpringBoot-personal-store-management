@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 @Getter
-public class LoginScreenEntity {
+public class LoginScreenModel {
     String token;
     String refreshToken;
     String expirationTime;

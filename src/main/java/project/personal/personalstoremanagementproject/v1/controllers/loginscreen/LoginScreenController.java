@@ -17,7 +17,7 @@ import java.util.List;
 
 @RequestMapping("/api/v1/login")
 @RestController
-public class LoginScreenController extends AbstractApiController<LoginScreenRequest, LoginScreenResponse, LoginScreenEntity> {
+public class LoginScreenController extends AbstractApiController<LoginScreenRequest, LoginScreenResponse, LoginScreenModel> {
     @Autowired
     private UserRepository userRepository;
 
@@ -56,7 +56,7 @@ public class LoginScreenController extends AbstractApiController<LoginScreenRequ
         var refreshToken = jwtService.generateRefreshToken(user);
 
         // Create LoginScreenEntity
-        var loginEntity = LoginScreenEntity.builder()
+        var loginEntity = LoginScreenModel.builder()
                 .token(token)
                 .refreshToken(refreshToken)
                 .expirationTime("24Hrs")
