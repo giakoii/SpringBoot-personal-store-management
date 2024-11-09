@@ -1,68 +1,79 @@
 package project.personal.personalstoremanagementproject.v1.controllers.LoginScreen;
 
-
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.personal.personalstoremanagementproject.exceptions.AppException;
 import project.personal.personalstoremanagementproject.exceptions.ErrorCode;
 import project.personal.personalstoremanagementproject.repositories.UserRepository;
+import project.personal.personalstoremanagementproject.services.JwtService;
 import project.personal.personalstoremanagementproject.v1.AbstractApiController;
 import project.personal.personalstoremanagementproject.v1.DetailError;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/api/v1/login")
+@RestController
 public class LoginScreenController extends AbstractApiController<LoginScreenRequest, LoginScreenResponse, LoginScreenEntity> {
-
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     /**
      * Main processing
+     *
      * @param request the request to process
      * @return
      */
     @Override
     protected LoginScreenResponse exec(LoginScreenRequest request) {
-        // Generate password encoder
-        var passwordEncoder = new BCryptPasswordEncoder(10);
-
-        // Find user by username
-        var user = userRepository.findByUserName(request.getUserName())
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        // Check if user is active
-        if (!user.getIsActive()) {
-            throw new RuntimeException("User not found");
-        }
-
-        // Check if password is correct
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        try {
+            // Verify login information
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUserName(), request.getPassword())
+            );
+        } catch (AuthenticationException e) {
             throw new RuntimeException("Invalid username or password");
         }
 
-        // Create LoginEntity object with user information
+        // Find user by username in database
+        var user = userRepository.findByUserNameAndIsActiveTrue(request.getUserName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Generate token and refresh token
+        var token = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        // Create LoginScreenEntity
         var loginEntity = LoginScreenEntity.builder()
-                .fullName(user.getFullName())
-                .nickName(user.getNickName())
-                .phoneNumber(user.getPhoneNumber())
-                .email(user.getEmail())
-                .address(user.getAddress())
+                .token(token)
+                .refreshToken(refreshToken)
+                .expirationTime("24Hrs")
                 .build();
 
         // True
         LoginScreenResponse loginResponse = new LoginScreenResponse();
         loginResponse.setSuccess(true);
-        loginResponse.setMessage(ErrorCode.SUCCESS,"Login successful");
+        loginResponse.setMessage(ErrorCode.SUCCESS, "Login successful");
+        loginResponse.setResponse(loginEntity);
         return loginResponse;
     }
 
     /**
      * Error check
-     * @param request the request to check
+     * @param request         the request to check
      * @param detailErrorList list of detected errors
      * @return
      */

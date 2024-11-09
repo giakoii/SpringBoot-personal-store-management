@@ -10,7 +10,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.SQLServerDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
 
 # Application
@@ -49,3 +49,10 @@ frontend:
   url:
     - http://localhost:5173/
     - https://vuamityenkhoa.vercel.app
+
+# Config JWT
+jwt:
+  secret: ${JWT_SECRET:}
+  expiration: 86400000
+
+
