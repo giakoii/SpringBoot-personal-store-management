@@ -1,4 +1,4 @@
-package project.personal.personalstoremanagementproject.v1.controllers.ScreenRegister;
+package project.personal.personalstoremanagementproject.v1.controllers.RegisterScreen;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;

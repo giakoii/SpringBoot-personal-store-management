@@ -1,4 +1,4 @@
-package project.personal.personalstoremanagementproject.v1.controllers.ScreenRegister;
+package project.personal.personalstoremanagementproject.v1.controllers.RegisterScreen;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
