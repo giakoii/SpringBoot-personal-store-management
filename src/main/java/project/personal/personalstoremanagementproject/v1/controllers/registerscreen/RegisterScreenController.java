@@ -1,5 +1,6 @@
 package project.personal.personalstoremanagementproject.v1.controllers.registerscreen;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +10,8 @@ import project.personal.personalstoremanagementproject.exceptions.ErrorCode;
 import project.personal.personalstoremanagementproject.repositories.UserRepository;
 import project.personal.personalstoremanagementproject.utils.StringUtil;
 import project.personal.personalstoremanagementproject.v1.AbstractApiController;
-import project.personal.personalstoremanagementproject.v1.DetailError;
+import project.personal.personalstoremanagementproject.exceptions.DetailError;
+import project.personal.personalstoremanagementproject.v1.controllers.loginscreen.LoginScreenResponse;
 
 import java.util.List;
 
@@ -17,11 +19,8 @@ import java.util.List;
 @RestController
 public class RegisterScreenController extends AbstractApiController<RegisterScreenRequest, RegisterScreenResponse, String> {
 
-    private final UserRepository userRepository;
-
-    public RegisterScreenController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Main processing
@@ -37,10 +36,9 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
         }
         // Generate password encoder
         var passwordEncoder = new BCryptPasswordEncoder(10);
-        var stringUtil = new StringUtil();
         // Create new user
         var newUser = User.builder()
-                .userId(stringUtil.createId(new User(), userRepository))
+                .userId(StringUtil.createId(new User(), userRepository))
                 .userName(request.getUserName())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
@@ -53,7 +51,7 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
         // True
         RegisterScreenResponse registerResponse = new RegisterScreenResponse();
         registerResponse.setSuccess(true);
-        registerResponse.setMessage(ErrorCode.SUCCESS,"Create user successful");
+        registerResponse.setMessage(ErrorCode.SUCCESS,"Create user successful", detailErrorList);
         return registerResponse;
     }
 
@@ -65,6 +63,12 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
      */
     @Override
     protected RegisterScreenResponse errorCheck(RegisterScreenRequest request, List<DetailError> detailErrorList) {
+        if (!detailErrorList.isEmpty()) {
+            RegisterScreenResponse response = new RegisterScreenResponse();
+            response.setSuccess(false);
+            response.setMessage(ErrorCode.VALIDATION_ERROR, "Validation errors occurred", detailErrorList);
+            return response;
+        }
         return null;
     }
 }

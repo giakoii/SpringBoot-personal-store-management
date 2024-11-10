@@ -1,10 +1,11 @@
 package project.personal.personalstoremanagementproject.v1;
 
-import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import project.personal.personalstoremanagementproject.exceptions.DetailError;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 public abstract class AbstractApiController<T extends AbstractApiRequest, U extends AbstractApiResponse<V>, V> {
 
     protected Logger logger = Logger.getLogger(this.getClass().getName());
+    protected List<DetailError> detailErrorList;
 
     /**
      * API entry point
@@ -21,7 +23,7 @@ public abstract class AbstractApiController<T extends AbstractApiRequest, U exte
      */
     @Transactional
     @PostMapping
-    public U post(@RequestBody T request) {
+    public U post(@Valid @RequestBody T request) {
         List<DetailError> detailErrorList = validate(request);
 
         // Error check

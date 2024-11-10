@@ -11,7 +11,7 @@ import project.personal.personalstoremanagementproject.exceptions.ErrorCode;
 import project.personal.personalstoremanagementproject.repositories.UserRepository;
 import project.personal.personalstoremanagementproject.services.JwtService;
 import project.personal.personalstoremanagementproject.v1.AbstractApiController;
-import project.personal.personalstoremanagementproject.v1.DetailError;
+import project.personal.personalstoremanagementproject.exceptions.DetailError;
 
 import java.util.List;
 
@@ -29,7 +29,6 @@ public class LoginScreenController extends AbstractApiController<LoginScreenRequ
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     /**
      * Main processing
      *
@@ -48,7 +47,7 @@ public class LoginScreenController extends AbstractApiController<LoginScreenRequ
         }
 
         // Find user by username in database
-        var user = userRepository.findByUserNameAndIsActiveTrue(request.getUserName())
+        var user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Generate token and refresh token
@@ -65,7 +64,7 @@ public class LoginScreenController extends AbstractApiController<LoginScreenRequ
         // True
         LoginScreenResponse loginResponse = new LoginScreenResponse();
         loginResponse.setSuccess(true);
-        loginResponse.setMessage(ErrorCode.SUCCESS, "Login successful");
+        loginResponse.setMessage(ErrorCode.SUCCESS, "Login successful", detailErrorList);
         loginResponse.setResponse(loginEntity);
         return loginResponse;
     }
@@ -78,6 +77,12 @@ public class LoginScreenController extends AbstractApiController<LoginScreenRequ
      */
     @Override
     protected LoginScreenResponse errorCheck(LoginScreenRequest request, List<DetailError> detailErrorList) {
+        if (!detailErrorList.isEmpty()) {
+            LoginScreenResponse response = new LoginScreenResponse();
+            response.setSuccess(false);
+            response.setMessage(ErrorCode.VALIDATION_ERROR, "Validation errors occurred", detailErrorList);
+            return response;
+        }
         return null;
     }
 }

@@ -17,7 +17,7 @@ public class StringUtil {
      * @return
      * @param <T>
      */
-    public<T> String createId(T entity, BaseRepository<T, ?> repository) {
+    public static <T> String createId(T entity, BaseRepository<T, ?> repository) {
         // Get current date
         String date = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
         // Get count of entities

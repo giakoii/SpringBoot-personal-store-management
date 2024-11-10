@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import project.personal.personalstoremanagementproject.exceptions.DetailError;
 import project.personal.personalstoremanagementproject.exceptions.ErrorCode;
 
 import java.util.List;
@@ -37,14 +38,16 @@ public abstract class AbstractApiResponse<T> {
       */
      T Response ;
 
-    /**
-     * Set Message
-     * @param messageId
-     * @param message
-     */
-    public void setMessage(ErrorCode messageId, String message) {
-        this.message = message;
+     /**
+      * Set Message
+      * @param messageId
+      * @param message
+      * @param detailErrors
+      */
+    public void setMessage(ErrorCode messageId, String message, List<DetailError> detailErrors) {
         this.messageId = messageId;
+        this.message = message;
+        this.detailErrorList = detailErrors;
     }
 
 }

@@ -9,8 +9,8 @@ import project.personal.personalstoremanagementproject.v1.AbstractApiRequest;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class LoginScreenRequest extends AbstractApiRequest {
-    @NotBlank
+    @NotBlank(message = "Username cannot be blank")
     String userName;
-    @NotBlank
+    @NotBlank(message = "Password cannot be blank")
     String password;
 }
