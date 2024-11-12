@@ -23,7 +23,7 @@ public abstract class AbstractApiController<T extends AbstractApiRequest, U exte
      */
     @Transactional
     @PostMapping
-    public U post(@Valid @RequestBody T request) {
+    public U post(@Valid @RequestBody T request) throws Exception {
         List<DetailError> detailErrorList = validate(request);
 
         // Error check
@@ -41,7 +41,7 @@ public abstract class AbstractApiController<T extends AbstractApiRequest, U exte
      * @param request the request to process
      * @return ResponseEntity containing the response
      */
-    protected abstract U exec(T request);
+    protected abstract U exec (T request) throws Exception;
 
     /**
      * Error check

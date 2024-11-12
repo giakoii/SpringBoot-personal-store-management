@@ -7,18 +7,18 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
-public class MailOtpConfiguration {
+public class MailConfig {
 
-    @Value("${mail.host}")
+    @Value("${spring.mail.host}")
     String mailHost;
 
-    @Value("${mail.port}")
+    @Value("${spring.mail.port}")
     String mailPort;
 
     @Value("${mail.username}")
     String userName;
 
-    @Value("${mail.password}")
+    @Value("${spring.mail.password}")
     String password;
 
     @Bean

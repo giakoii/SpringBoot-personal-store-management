@@ -32,20 +32,23 @@ public class User extends BaseEntity implements UserDetails{
     @Column(name = "PASSWORD",nullable = false)
     String password;
 
-    @Column(name = "FULL_NAME")
+    @Column(name = "FULL_NAME", columnDefinition = "nvarchar(255)")
     String fullName;
 
-    @Column(name = "NICK_NAME")
+    @Column(name = "NICK_NAME", columnDefinition = "nvarchar(255)")
     String nickName;
 
-    @Column(name = "PHONE_NUMBER")
+    @Column(name = "PHONE_NUMBER" ,unique = true)
     String phoneNumber;
 
     @Column(name = "EMAIL",unique = true)
     String email;
 
-    @Column(name = "ADDRESS")
+    @Column(name = "ADDRESS", columnDefinition = "nvarchar(255)")
     String address;
+
+    @Column(name = "IMG")
+    String img;
 
     @Column(name = "ROLE_ID")
     @Enumerated(EnumType.STRING)

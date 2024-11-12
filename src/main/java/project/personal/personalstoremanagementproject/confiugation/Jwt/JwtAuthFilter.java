@@ -41,7 +41,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         final String username;
 
         // Skip JWT validation for public endpoints
-        if (request.getRequestURI().equals("/api/v1/register") || request.getRequestURI().equals("/api/v1/login")) {
+        String uri = request.getRequestURI();
+        if (uri.equals("/api/v1/register")
+                || uri.equals("/api/v1/login")
+                || uri.equals("/api/v1/forgotPassword")) {
             filterChain.doFilter(request, response);
             return;
         }
