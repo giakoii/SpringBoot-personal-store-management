@@ -32,6 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/application-secrets.yaml
+src/main/resources/application-secrets.properties
 
 

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import project.personal.personalstoremanagementproject.common.CommonLogic;
 import project.personal.personalstoremanagementproject.utils.constants.ConstantEnum;
 import project.personal.personalstoremanagementproject.entities.User;
 import project.personal.personalstoremanagementproject.exceptions.ErrorCode;
@@ -22,13 +23,19 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CommonLogic commonLogic;
+
+    @Autowired
+    private StringUtil stringUtil;
+
     /**
      * Main processing
      * @param request the request to process
      * @return
      */
     @Override
-    protected RegisterScreenResponse exec(RegisterScreenRequest request) {
+    protected RegisterScreenResponse exec(RegisterScreenRequest request) throws Exception {
         // Find user by username and email
         var user = userRepository.existsByEmailAndUserName(request.getEmail(), request.getUserName());
         if (user) {
@@ -45,7 +52,12 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
                 .role(ConstantEnum.Role.CUSTOMER)
                 .lastLogin(null)
                 .build();
-        newUser.setIsActive(true);
+        newUser.setIsActive(false);
+
+        // Send mail to user
+        commonLogic.sendMail("RegisterScreen", newUser);
+
+        // Save to database
         userRepository.save(newUser);
 
         // True
