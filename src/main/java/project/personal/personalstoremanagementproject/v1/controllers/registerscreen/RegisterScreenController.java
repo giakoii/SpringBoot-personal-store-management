@@ -26,9 +26,6 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
     @Autowired
     private CommonLogic commonLogic;
 
-    @Autowired
-    private StringUtil stringUtil;
-
     /**
      * Main processing
      * @param request the request to process
@@ -36,10 +33,13 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
      */
     @Override
     protected RegisterScreenResponse exec(RegisterScreenRequest request) throws Exception {
+        RegisterScreenResponse response = new RegisterScreenResponse();
         // Find user by username and email
         var user = userRepository.existsByEmailAndUserName(request.getEmail(), request.getUserName());
         if (user) {
-            throw new RuntimeException("User already exists");
+            response.setSuccess(false);
+            response.setMessage(ErrorCode.VALIDATION_ERROR, "User already exists", detailErrorList);
+            return response;
         }
         // Generate password encoder
         var passwordEncoder = new BCryptPasswordEncoder(10);
@@ -61,10 +61,9 @@ public class RegisterScreenController extends AbstractApiController<RegisterScre
         userRepository.save(newUser);
 
         // True
-        RegisterScreenResponse registerResponse = new RegisterScreenResponse();
-        registerResponse.setSuccess(true);
-        registerResponse.setMessage(ErrorCode.SUCCESS,"Create user successful", detailErrorList);
-        return registerResponse;
+        response.setSuccess(true);
+        response.setMessage(ErrorCode.SUCCESS,"Create user successful", detailErrorList);
+        return response;
     }
 
     /**
