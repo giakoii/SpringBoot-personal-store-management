@@ -1,10 +1,13 @@
 package project.personal.personalstoremanagementproject.confiugation.Jwt;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -13,6 +16,7 @@ import project.personal.personalstoremanagementproject.services.JwtService;
 import project.personal.personalstoremanagementproject.services.UserDetailService;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -64,15 +68,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             // Validate token
             if (jwtService.isTokenValid(jwtToken, userDetails)) {
-                var usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // Get the role from JWT token
+                String role = jwtService.extractRole(jwtToken);
+                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+
+                var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
                 // Set security context
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+                logger.info("User authenticated: " + username);
             }
         }
         // Continue filter chain after processing
         filterChain.doFilter(request, response);
     }
+
 
 }
