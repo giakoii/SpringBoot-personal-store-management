@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import project.personal.personalstoremanagementproject.services.UserDetailService;
+import project.personal.personalstoremanagementproject.utils.constants.ConstantEnum;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +28,15 @@ public class JwtConfig {
     @Autowired
     private  JwtAuthFilter jwtFilter;
 
+    private final String[] PUBLIC_ENDPOINTS = {
+            "/api/v1/login",
+            "/api/v1/register",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/webjars/**"
+    };
     /**
      * Configures the security filter chain for handling HTTP security in the application.
      *
@@ -39,12 +49,10 @@ public class JwtConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeRequests(request -> request
-                        .requestMatchers("/api/v1/login").permitAll() // Allow access to login endpoint
-                        .requestMatchers("/api/v1/register").permitAll() // Allow access to register endpoint
-                        .requestMatchers("/api/v1/userManagement").permitAll() // Allow access to Swagger UI
-//                        .requestMatchers("/admin/**").hasRole(String.valueOf(ConstantEnum.Role.ADMIN))
-//                        .requestMatchers("/user/**").hasRole(String.valueOf(ConstantEnum.Role.CUSTOMER))
-//                        .requestMatchers("/staff/**").hasRole(String.valueOf(ConstantEnum.Role.STAFF))
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers("/api/v1/admin/**").hasRole(ConstantEnum.Role.ADMIN.name())
+                        .requestMatchers("/api/v1/staff/**").hasRole(ConstantEnum.Role.STAFF.name())
+                        .requestMatchers("/api/v1/user/**").hasAnyRole(ConstantEnum.Role.CUSTOMER.name(), ConstantEnum.Role.ADMIN.name())
                         .anyRequest().authenticated())
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
