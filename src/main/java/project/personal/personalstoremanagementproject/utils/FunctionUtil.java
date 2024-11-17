@@ -29,7 +29,7 @@ public class FunctionUtil {
                         .orElseThrow(() -> new RuntimeException("User not found"));
             }
         }
-        return null; // return null if not authenticated
+        return null;
     }
 
 

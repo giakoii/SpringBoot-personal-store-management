@@ -14,21 +14,25 @@ import java.io.Serializable;
 @Value
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateUserProfileRequest extends AbstractApiRequest implements Serializable {
+
     /**
      * Full name
      */
     @Pattern(regexp = "^[a-zA-Z\\s]{1,255}$", message = "Full name must contain only letters and spaces")
     String fullName;
+
     /**
      * Nick name
      */
     @Pattern(regexp = "^[a-zA-Z\\s]{1,255}$", message = "Nick name must contain only letters and spaces")
     String nickName;
+
     /**
      * Phone number
      */
     @Pattern(regexp = "^(0)\\d{9,10}$", message = "Phone number must be in the format 0xxxxxxxxx")
     String phoneNumber;
+
     /**
      * Address
      */

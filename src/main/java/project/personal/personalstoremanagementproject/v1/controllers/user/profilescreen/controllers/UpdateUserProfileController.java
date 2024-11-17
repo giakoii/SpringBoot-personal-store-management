@@ -3,16 +3,19 @@ package project.personal.personalstoremanagementproject.v1.controllers.user.prof
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import project.personal.personalstoremanagementproject.exceptions.DetailError;
 import project.personal.personalstoremanagementproject.exceptions.ErrorCode;
 import project.personal.personalstoremanagementproject.repositories.UserRepository;
 import project.personal.personalstoremanagementproject.utils.FunctionUtil;
 import project.personal.personalstoremanagementproject.v1.AbstractApiController;
-import project.personal.personalstoremanagementproject.exceptions.DetailError;
 import project.personal.personalstoremanagementproject.v1.controllers.user.profilescreen.request.UpdateUserProfileRequest;
 import project.personal.personalstoremanagementproject.v1.controllers.user.profilescreen.responses.UpdateUserProfileResponse;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+/**
+ * Controller for updating user profile
+ */
 @RestController
 @RequestMapping("/api/v1/user/update-profile")
 public class UpdateUserProfileController extends AbstractApiController<UpdateUserProfileRequest, UpdateUserProfileResponse, String> {
@@ -61,6 +64,12 @@ public class UpdateUserProfileController extends AbstractApiController<UpdateUse
         return response;
     }
 
+    /**
+     * Check for errors
+     * @param request the request to check
+     * @param detailErrorList the list of errors
+     * @return
+     */
     @Override
     protected UpdateUserProfileResponse errorCheck(UpdateUserProfileRequest request, List<DetailError> detailErrorList) {
         if (!detailErrorList.isEmpty()) {

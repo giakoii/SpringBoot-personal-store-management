@@ -18,6 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import project.personal.personalstoremanagementproject.services.UserDetailService;
 import project.personal.personalstoremanagementproject.utils.constants.ConstantEnum;
 
+/**
+ * JwtConfig
+ */
 @Configuration
 @EnableWebSecurity
 public class JwtConfig {
@@ -37,6 +40,7 @@ public class JwtConfig {
             "/swagger-ui.html",
             "/webjars/**"
     };
+
     /**
      * Configures the security filter chain for handling HTTP security in the application.
      *

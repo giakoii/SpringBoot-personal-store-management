@@ -13,9 +13,29 @@ import java.util.List;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConcreteApiResponse<T> extends AbstractApiResponse<T> {
-     boolean success;
-     ErrorCode messageId;
-     String message;
-     List<DetailError> detailErrorList;
-     T response;
+
+    /**
+     * Success
+     */
+    boolean success;
+
+    /**
+     * MessageId
+     */
+    ErrorCode messageId;
+
+    /**
+     * Message
+     */
+    String message;
+
+    /**
+     * DetailErrorList
+     */
+    List<DetailError> detailErrorList;
+
+    /**
+     * Response
+     */
+    T response;
 }

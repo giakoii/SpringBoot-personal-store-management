@@ -10,9 +10,11 @@ import project.personal.personalstoremanagementproject.v1.AbstractApiController;
 import project.personal.personalstoremanagementproject.v1.controllers.user.profilescreen.models.SelectUserProfileModel;
 import project.personal.personalstoremanagementproject.v1.controllers.user.profilescreen.request.SelectUserProfileRequest;
 import project.personal.personalstoremanagementproject.v1.controllers.user.profilescreen.responses.SelectUserProfileResponse;
-
 import java.util.List;
 
+/**
+ * Controller for selecting user profile
+ */
 @RestController
 @RequestMapping("/api/v1/user/select-profile")
 public class SelectUserProfileController extends AbstractApiController<SelectUserProfileRequest, SelectUserProfileResponse, SelectUserProfileModel>{
@@ -20,6 +22,11 @@ public class SelectUserProfileController extends AbstractApiController<SelectUse
     @Autowired
     private FunctionUtil functionUtil;
 
+    /**
+     * Main process of the controller
+     * @param request the request to process
+     * @return
+     */
     @Override
     protected SelectUserProfileResponse exec(SelectUserProfileRequest request) throws Exception {
         var response = new SelectUserProfileResponse();
@@ -48,6 +55,12 @@ public class SelectUserProfileController extends AbstractApiController<SelectUse
         return response;
     }
 
+    /**
+     * Error check
+     * @param request
+     * @param detailErrorList
+     * @return
+     */
     @Override
     protected SelectUserProfileResponse errorCheck(SelectUserProfileRequest request, List<DetailError> detailErrorList) {
         if (!detailErrorList.isEmpty()) {

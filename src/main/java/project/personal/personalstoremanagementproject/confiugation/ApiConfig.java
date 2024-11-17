@@ -10,8 +10,21 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Collections;
 
+/**
+ * ApiConfig - Configuration for Swagger OpenAPI
+ */
 @Configuration
 public class ApiConfig {
+
+    /**
+     * Configures the OpenAPI object for Swagger.
+     *
+     * @param title the title of the API.
+     * @param url the URL of the API.
+     * @param version the version of the API.
+     * @param server the server URL of the API.
+     * @return an instance of {@link OpenAPI} object.
+     */
     @Bean
     public OpenAPI openAPI(@Value("${open.api.title}") String title,
                            @Value("${open.api.url}") String url,

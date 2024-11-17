@@ -18,6 +18,9 @@ import project.personal.personalstoremanagementproject.services.UserDetailServic
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * JwtAuthFilter
+ */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
